@@ -10653,10 +10653,6 @@ a.text-dark:focus {
   color: #fff;
 }
 
-.nav-link {
-  color: #fff;
-}
-
 body {
   display: flex;
   min-height: 100vh;
@@ -10665,5 +10661,10 @@ body {
 
 .app-content {
   flex: 1;
+}
+
+.table th,
+.table td {
+  padding: 0.55rem 0.75rem;
 }
 
