@@ -9,12 +9,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::defaultOrder()->withDepth()->get();
-        return view('admin.adverts.categories.index', compact('categories'));
+        return view('admin.adverts.create.index', compact('categories'));
     }
     public function create()
     {
         $parents = Category::defaultOrder()->withDepth()->get();
-        return view('admin.adverts.categories.create', compact('parents'));
+        return view('admin.adverts.create.create', compact('parents'));
     }
     public function store(Request $request)
     {
@@ -28,16 +28,18 @@ class CategoryController extends Controller
             'slug' => $request['slug'],
             'parent_id' => $request['parent'],
         ]);
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return redirect()->route('admin.adverts.create.show', $category);
     }
     public function show(Category $category)
     {
-        return view('admin.adverts.categories.show', compact('category'));
+        $parentAttributes = $category->parentAttributes();
+        $attributes = $category->attributes()->orderBy('sort')->get();
+        return view('admin.adverts.create.show', compact('category', 'attributes', 'parentAttributes'));
     }
     public function edit(Category $category)
     {
         $parents = Category::defaultOrder()->withDepth()->get();
-        return view('admin.adverts.categories.edit', compact('category', 'parents'));
+        return view('admin.adverts.create.edit', compact('category', 'parents'));
     }
     public function update(Request $request, Category $category)
     {
@@ -51,11 +53,38 @@ class CategoryController extends Controller
             'slug' => $request['slug'],
             'parent_id' => $request['parent'],
         ]);
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return redirect()->route('admin.adverts.create.show', $category);
     }
+
+    public function first(Category $category)
+    {
+        if ($first = $category->siblings()->defaultOrder()->first()) {
+            $category->insertBeforeNode($first);
+        }
+        return redirect()->route('admin.adverts.create.index');
+    }
+    public function up(Category $category)
+    {
+        $category->up();
+        return redirect()->route('admin.adverts.create.index');
+    }
+    public function down(Category $category)
+    {
+        $category->down();
+        return redirect()->route('admin.adverts.create.index');
+    }
+    public function last(Category $category)
+    {
+        if ($last = $category->siblings()->defaultOrder('desc')->first()) {
+            $category->insertAfterNode($last);
+        }
+        return redirect()->route('admin.adverts.create.index');
+    }
+
+
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.adverts.categories.index');
+        return redirect()->route('admin.adverts.create.index');
     }
 }

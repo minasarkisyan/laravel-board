@@ -4,6 +4,12 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+//font-awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
 .navbar {
     background-color: #0c64a2;
     padding: 0.35rem 1rem;
@@ -25,5 +31,17 @@ body {
 
 .table th, .table td {
     padding: 0.55rem 0.75rem;
+}
+
+.adverts-list {
+    .advert {
+        margin: 20px 0;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
+    }
 }
 
